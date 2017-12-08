@@ -138,7 +138,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 			if(s!=null)
 			{
 				s=(Source)declaration_SourceSink.source.visit(this, null);
-				if(s.Type.equals(declaration_SourceSink.Type))
+				//System.out.println("Here"+declaration_SourceSink.source.Type);
+				if(declaration_SourceSink.source.Type==null||s.Type.equals(declaration_SourceSink.Type) )
 				{
 					//do nothing
 				}
@@ -204,7 +205,8 @@ public class TypeCheckVisitor implements ASTVisitor {
 		//System.out.println(e.Type);
 		//else
 		//	throw new SemanticException(statement_Assign.firstToken, "Type Exception Occured at visitStatement_Assign");
-		if(l.Type.equals(e.Type))
+		
+		if(l.Type.equals(e.Type)|| l.Type.equals(Type.IMAGE) && e.Type.equals(Type.INTEGER))
 			statement_Assign.setCartesian(l.isCartesian);
 		else
 			throw new SemanticException(statement_Assign.firstToken, "Type Exception Occured at visitStatement_Assign");
@@ -218,23 +220,23 @@ public class TypeCheckVisitor implements ASTVisitor {
 	public Object visitStatement_In(Statement_In statement_In, Object arg)
 			throws Exception {
 		// TODO Auto-generated method stub
-		Source s=statement_In.source;
-		if(s!=null)
-		{	s=(Source)s.visit(this, null);
+		//Source s=statement_In.source;
+//		if(s!=null)
+//		{	s=(Source)s.visit(this, null);
 		//else
 		//throw new SemanticException(statement_In.firstToken, "Type Exception Occured at visitStatement_In");
 		if(symbolTable.get(statement_In.name).Type!=null)
 		{
 			statement_In.dec=symbolTable.get(statement_In.name);
-			Object nameType=statement_In.dec.Type;
-			if(nameType.equals(statement_In.source.Type))
-				return statement_In;
-			else
-				throw new SemanticException(statement_In.firstToken, "Type Exception Occured at visitStatement_In");
+//			Object nameType=statement_In.dec.Type;
+//			if(nameType.equals(statement_In.source.Type))
+//				return statement_In;
+//			else
+//				throw new SemanticException(statement_In.firstToken, "Type Exception Occured at visitStatement_In");
 		}
 		else
 			throw new SemanticException(statement_In.firstToken, "Type Exception Occured at visitStatement_In");
-		}
+//		}
 		//throw new UnsupportedOperationException();
 		return statement_In;
 	}
@@ -562,20 +564,22 @@ public class TypeCheckVisitor implements ASTVisitor {
 	public Object visitSource_CommandLineParam(
 			Source_CommandLineParam source_CommandLineParam, Object arg)
 			throws Exception {
-		Expression e=(Expression)source_CommandLineParam.paramNum;
-		if(e!=null) 
-		{	e=(Expression)e.visit(this, null);
-		//else
-		//	throw new SemanticException(source_CommandLineParam.firstToken,"visitSource_CommandLineParam():Expression e is null");
-		source_CommandLineParam.Type=e.Type;
-		//System.out.println(source_CommandLineParam.Type);
-		if(!source_CommandLineParam.Type.equals(Type.INTEGER))
-		{
-			throw new SemanticException(source_CommandLineParam.firstToken,"Type Exception Occured at visitSource_Ident");
+		source_CommandLineParam.Type = null;
+		Expression e = (Expression) source_CommandLineParam.paramNum;
+		if (e != null) {
+			e = (Expression) e.visit(this, null);
+			// else
+			// throw new
+			// SemanticException(source_CommandLineParam.firstToken,"visitSource_CommandLineParam():Expression
+			// e is null");
+			// System.out.println(source_CommandLineParam.Type);
+			if (!e.Type.equals(Type.INTEGER)) {
+				throw new SemanticException(source_CommandLineParam.firstToken,
+						"Type Exception Occured at visitSource_Ident");
+			}
 		}
-		}
-		return source_CommandLineParam;	
-		//throw new UnsupportedOperationException();
+		return source_CommandLineParam;
+		// throw new UnsupportedOperationException();
 	}
 
 	@Override

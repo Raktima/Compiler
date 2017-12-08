@@ -260,10 +260,10 @@ public class Parser {
 			 e0=new Expression_PredefinedName(ftr,k);
 			if(t.kind.equals(COMMA))
 			{	match(COMMA);
-				if(t.kind.equals(KW_A))
+				if(t.kind.equals(KW_a))
 				{	Token ftA=t;
 	                k=t.kind;
-					match(KW_A);
+					match(KW_a);
 					e1=new Expression_PredefinedName(ftA,k);}
 				else
 					throw new SyntaxException(t,"raSelector():Did not find A");

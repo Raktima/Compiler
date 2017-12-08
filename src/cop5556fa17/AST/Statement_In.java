@@ -6,7 +6,6 @@ public class Statement_In extends Statement {
 	
 	public final String name;
 	public final Source source;
-	
 	public Declaration dec;
 	
 
