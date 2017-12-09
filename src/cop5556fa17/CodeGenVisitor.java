@@ -42,7 +42,7 @@ import cop5556fa17.AST.Statement_In;
 import cop5556fa17.AST.Statement_Out;
 import cop5556fa17.AST.Statement_Assign;
 //import cop5556fa17.image.ImageFrame;
-//import cop5556fa17.image.ImageSupport;
+//mport cop5556fa17.image.ImageSupport;
 
 public class CodeGenVisitor implements ASTVisitor, Opcodes {
 
@@ -318,7 +318,7 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		return null;
 	}
 
-	// generate code to leave the two values on the stack
+
 	@Override
 	public Object visitIndex(Index index, Object arg) throws Exception {
 		// TODO HW6
@@ -334,12 +334,11 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 		else
 		{
 			mv.visitInsn(DUP2);
-			mv.visitMethodInsn(INVOKESTATIC, RuntimeFunctions.className, "cart_y", RuntimeFunctions.cart_ySig,false);
+			mv.visitMethodInsn(INVOKESTATIC, RuntimeFunctions.className, "cart_x", RuntimeFunctions.cart_xSig,false);
 			mv.visitInsn(DUP_X2);
 			mv.visitInsn(POP);
-			mv.visitMethodInsn(INVOKESTATIC, RuntimeFunctions.className, "cart_x", RuntimeFunctions.cart_xSig,false);
+			mv.visitMethodInsn(INVOKESTATIC, RuntimeFunctions.className, "cart_y", RuntimeFunctions.cart_ySig,false);
 		}
-		
 		return null;
 		//throw new UnsupportedOperationException();
 	}
@@ -669,10 +668,8 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 			statement_Assign.e.visit(this, arg);
 			statement_Assign.lhs.visit(this, arg);
 		}
-		else 
-		{
-			if(statement_Assign.lhs.Type.equals(Type.IMAGE)) 
-			{				
+		else if(statement_Assign.lhs.Type.equals(Type.IMAGE))
+		{				
 				boolean bool=statement_Assign.lhs.isCartesian();
 				mv.visitFieldInsn(GETSTATIC,className, statement_Assign.lhs.name,ImageSupport.ImageDesc);
                 mv.visitInsn(DUP);
@@ -718,8 +715,8 @@ public class CodeGenVisitor implements ASTVisitor, Opcodes {
 				mv.visitFrame(Opcodes.F_CHOP,1, null, 0, null);
 				mv.visitVarInsn(ILOAD, 1);
 				mv.visitVarInsn(ILOAD, 3);
-				mv.visitJumpInsn(IF_ICMPLT, l3);
-			}	
+				mv.visitJumpInsn(IF_ICMPLT, l3);	
+			
 		}
 		return null;
 	}
